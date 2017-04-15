@@ -1,0 +1,10 @@
+To run this program simply type into the terminal "python arima.py"
+This will output the RMSE to the terminal and the predictions to a text document called DataDocument
+
+I reformatted all my data and condensed it all into the the DataDocumentReformated which organized the DataDocument and included the RMSE of several trials. 
+
+I only show the predictions for the trial with the lowest RMSE.
+
+I also created a file called reformat.py so it would work with the pandas arima model. THis works generally fine however do to random spaces in the original data set files 4.csv, 21.csv, and 84.csv needed to be manually changed. If you run reformat.py you will need to copy and paste the good files which are located in the folder GoodFiles into the folder data overwriting the old files.
+
+Due to the size of our data it takes a long time to run this code so give it about 3min.
