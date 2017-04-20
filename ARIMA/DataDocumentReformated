@@ -9,6 +9,11 @@ ARIMA with param (4,2,0): The RMSE = 102.635705559
 ARIMA with param (5,2,0): The RMSE = 98.8596672359
 
 
+Predictions for total Amount of Key Products
+
+1012.1648 , 1054.8713 , 974.4218 , 960.0478 , 913.6583 , 927.7627 , 972.5138 , 971.4056 , 987.9567 , 985.7122 , 970.8586 , 971.9265 , 972.5461 , 982.1401 , 981.4478 , 989.1093 , 993.1176 , 997.7819 , 998.082 , 1004.7814 , 1008.896 , 1012.2647 , 1015.5302 , 1020.9839 , 1025.627 , 1030.9484 , 1036.1035 , 1040.5298 
+
+
 The predictions for the Key products for the days 119-146 with parameters (7,1,0):
 	The Key Product is the number directly above the list of the 17 predictions. The predictions go from day to day in order with day 118 being the first in the list.
 

@@ -62,6 +62,10 @@ def findRMSE():
 
 def makePredictions():
 
+	totalPredictions = []
+	for i in range(118,146):
+		totalPredictions.append(0.0)
+	print len(totalPredictions)
 	output = open("dataDocument", 'w')	
 	for filename in os.listdir("data/"):
 		output.write("\n\n Key Product: " + str(filename) + "\n")
@@ -77,11 +81,16 @@ def makePredictions():
 			prediction = fittedModel.forecast()[0]
 			if prediction[0] < 0:
 				prediction[0] = 0
+			totalPredictions[i-118] = totalPredictions[i-118] + prediction[0]
 			predictions.insert(len(predictions),prediction[0])
 			updatingTrainingSet.append(prediction)
 			#print( str(prediction) + " , " +str(testSet[i]))
 		for i in range(len(predictions)):		
 			output.write(str(round(predictions[i],4)) + " , " )
+
+	output.write("\n\n\n\n")
+	for i in range(len(totalPredictions)):
+		output.write(str(round(totalPredictions[i],4)) + " , ")
 	
 
 
