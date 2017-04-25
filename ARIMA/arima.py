@@ -24,13 +24,30 @@ import os
 #print(model_fit.summary())
 
 
+plotTrain = []
+validatingTrain = []
+totalPredictions = []
+validatingIter = []
+totalPredictionsIter = []
+
+
+for i in range(0,116):
+	plotTrain.append(0.0)
+for i in range(100,116):
+	validatingTrain.append(1.0)
+	validatingIter.append(i)
+for i in range(118,146):
+	totalPredictions.append(0.0)
+	totalPredictionsIter.append(i)
+
+
 
 def daysToDates(val):
 	return datetime.strptime("190"+str(val), '%Y-%m')
 
 def findRMSE():
 	totalTestSet = []
-	totalPredictions = []
+	pred = []
 	totalError = []
 	for filename in os.listdir("data/"):
 		data = read_csv("data/" + str(filename), header = 0, parse_dates=[0], index_col = 0, squeeze = True, date_parser = daysToDates)
@@ -41,15 +58,18 @@ def findRMSE():
 		print "----"
 		for i in range(0,100):
 			updatingTrainingSet.append(sales[i])
+		for i in range(0,116):
+			plotTrain[i] = plotTrain[i] + sales[i]
 		predictions = []
 		for i in range(0,16):
 			arimaModel = ARIMA(updatingTrainingSet,order=(7,1,0))
 			fittedModel = arimaModel.fit(disp=0)
 			prediction = fittedModel.forecast()[0]
 			predictions.append(prediction)
+			validatingTrain[i] = validatingTrain[i] + prediction
 			updatingTrainingSet.append(testSet[i])
 			totalTestSet.append(testSet)
-			totalPredictions.append(predictions)
+			pred.append(predictions)
 
 		squaredError =mean_squared_error(testSet, predictions)
 		totalError.append(squaredError)
@@ -61,11 +81,6 @@ def findRMSE():
 	print "The RMSE is " + str(error)
 
 def makePredictions():
-
-	totalPredictions = []
-	for i in range(118,146):
-		totalPredictions.append(0.0)
-	print len(totalPredictions)
 	output = open("dataDocument", 'w')	
 	for filename in os.listdir("data/"):
 		output.write("\n\n Key Product: " + str(filename) + "\n")
@@ -75,6 +90,7 @@ def makePredictions():
 		for i in range(0,116):
 			updatingTrainingSet.append(trainingSet[i])
 		predictions = []
+		print "-----"
 		for i in range(118,146):
 			arimaModel = ARIMA(updatingTrainingSet,order=(7,1,0))
 			fittedModel = arimaModel.fit(disp=0)
@@ -94,7 +110,17 @@ def makePredictions():
 	
 
 
-
+findRMSE()
 makePredictions()
+
+pyplot.plot(plotTrain, 'r')
+pyplot.plot(validatingIter, validatingTrain, 'b')
+pyplot.plot(totalPredictionsIter, totalPredictions, 'g')
+pyplot.ylabel("Sale Quantity")
+pyplot.xlabel("Time (in days)")
+pyplot.show()	
+
+
+
 
 
