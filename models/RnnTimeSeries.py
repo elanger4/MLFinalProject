@@ -47,21 +47,6 @@ validation = data_avgs[101:]
 # In order to avoid exploding gradients, scale the data between 0 -> 1
 #data_avgs = DataFrame(MinMaxScaler(feature_range=(0,1)).fit_transform(data_avgs))
 
-'''
-training = np.arraydata_avgs[:101]
-validation = data_avgs[101:]
-
-train_in = np.array([ [i] for i in training[:-1] ])
-train_out  = np.array([ [i] for i in training[1:] ])
-print train_in
-print train_out
-
-train_in = train_in.reshape((1,100,1))
-train_out = train_out.reshape((1,100))
-
-val_in  = [ [i] for i in validation[1:] ]
-val_out = [ [i] for i in validation[:-1] ]
-'''
 
 # Split dataset into trainging and validation data
 #print data_avgs
@@ -70,7 +55,6 @@ trainX = np.empty([len(training) - 1, 1], dtype=float)
 testX = np.empty([len(validation) - 1, 1], dtype=float)
 
 for i, val in enumerate(training[:-1]):
-    print i, val
     trainX[i] = np.array(np.array(val))
 
 for i, val in enumerate(validation[:-1]):
