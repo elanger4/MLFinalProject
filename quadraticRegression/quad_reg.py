@@ -1,9 +1,12 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
+from sklearn.metrics import r2_score
+
 
 from pandas import read_csv
 from matplotlib import pyplot
@@ -33,6 +36,15 @@ def quad_reg(order):
 
     #totalTrainingSet now contains a list of lists of values for each product on each day
 
+    #create a daily total array that contains total sales for each day
+    dailyTotal = [0] * 118
+    for data in totalTrainingSet:
+        for i in range(len(data)):
+            dailyTotal[i] += int(data[i]);
+
+            
+    print(dailyTotal)
+
     totalSquaredError = []
     for data in totalTrainingSet:
         data = list(map(int, data)) #converts to ints
@@ -52,7 +64,7 @@ def quad_reg(order):
         squaredError = mean_squared_error(testSet, predictions)
 
         totalSquaredError.append(squaredError)
-        
+
     error = 0
     for i in range(len(totalSquaredError)):
         error += totalSquaredError[i]
@@ -92,30 +104,33 @@ def quad_reg(order):
         count += 1
 
 
-    '''
-
+        
+    #train and predict for the total number of sales
+    
+    output.write("\n\n ALL PRODUCTS:\n")
     x = np.linspace(0,118,118)
-
-    #plt.scatter(x, data, color='navy', s=30, marker='o', label="training points")
-    print(len(data))
-
     X = x[:, np.newaxis]
-
-    newx = np.linspace(0,135,135);
+    newx = np.linspace(0,146,146)
     NEWX = newx[:, np.newaxis]
-
     model = make_pipeline(PolynomialFeatures(order), Ridge())
-    model.fit(X, data)
-    dataLine = model.predict(NEWX)
+    fittedModel = model.fit(X, dailyTotal)
+    predictions = model.predict(NEWX)
+    print("R2: %0.3f" % r2_score(dailyTotal, fittedModel.predict(X))) 
 
-    #normalizes the data so that there are no negative values
-    for i in range(len(dataLine)):
-        if(dataLine[i] < 0):
-            dataLine[i] = 0
-    print(dataLine)
-    plt.plot(newx, dataLine, color="black", linewidth=2, label="degree %d" % order)
-    plt.show()
-'''    
+    for i in range(len(predictions)):
+        if(predictions[i] < 0):
+            predictions[i] = 0
+    
+    for prediction in predictions[119:]:
+            output.write(str(round(prediction,4)) + " ,")
+
+    
+    plt.scatter(x, dailyTotal, color='navy', s=30, marker='o', label="training points")        
+    plt.plot(newx, predictions, color="black", linewidth=2, label="degree %d" % order)
+    plt.ylabel('Sale Quantity')
+    plt.xlabel('Time (in Days)')
+    plt.show() 
+
     
 
-quad_reg(4)
+quad_reg(2)
